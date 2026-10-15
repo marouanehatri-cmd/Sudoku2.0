@@ -1,0 +1,48 @@
+
+name: Build Sudoku APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Prepare app
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+          echo '{"name":"sudoku-studio","version":"1.0.0","private":true,"dependencies":{"@capacitor/core":"^8.0.0","@capacitor/android":"^8.0.0"},"devDependencies":{"@capacitor/cli":"^8.0.0"}}' > package.json
+          echo '{"appId":"com.sudokustudio.app","appName":"Sudoku Studio","webDir":"www"}' > capacitor.config.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create Android app
+        run: npx cap add android
+
+      - name: Build APK
+        working-directory: android
+        run: bash gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sudoku-Studio-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
