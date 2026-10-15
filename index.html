@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1324">
+  <meta name="description" content="Solve any classic 9×9 Sudoku, scan with a camera, or import a picture to fill the grid automatically.">
+  <title>Sudoku Studio · Scan & Solve</title>
+      <style>
+:root{color-scheme:dark;--bg:#0c1324;--surface:#121d33;--surface2:#17253e;--panel:#111c31;--line:#293a52;--muted:#8b9bb5;--light:#ecf3ff;--teal:#4be8c2;--teal-soft:#173f42;--blue:#719efc;--coral:#ff8c86}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse 66% 36% at 84% -4%,#19374f 0%,transparent 75%),radial-gradient(ellipse 50% 45% at 0% 100%,#122d36 0%,transparent 80%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--light);-webkit-tap-highlight-color:transparent}.svg-sprite{position:absolute;width:0;height:0;overflow:hidden}svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.app-shell{max-width:1120px;margin:0 auto;padding:28px 30px 22px}.masthead,.intro,.section-heading,.number-heading,.photo-heading,.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.masthead{padding-bottom:24px;border-bottom:1px solid rgba(160,187,228,.1)}.brand{display:flex;align-items:center;gap:13px}.brand-mark{width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#46e4c0,#20a9a4);display:grid;place-items:center;color:#092332;box-shadow:0 9px 30px rgba(70,228,192,.18)}.brand-mark svg{width:27px;height:27px;stroke-width:2.3}.brand-kicker,.eyebrow,.top-meta,.intro-pill,.photo-heading,.board-counter,.helper-note,footer{letter-spacing:.11em;font-weight:700;font-size:10px}.brand-kicker,.eyebrow{color:var(--teal)}h1{font-size:24px;letter-spacing:-.9px;margin:2px 0 0;line-height:1.15;font-weight:800}h1 span{color:var(--teal)}.top-meta{display:flex;align-items:center;gap:10px;color:#a3b4c9;white-space:nowrap}.online-dot{width:8px;height:8px;display:block;background:var(--teal);border-radius:50%;box-shadow:0 0 14px #4be8c2}.intro{align-items:end;margin:35px 0 28px}.intro h2{font-size:clamp(23px,3vw,34px);letter-spacing:-1.2px;line-height:1.13;margin:0 0 8px;font-weight:800}.intro p{color:var(--muted);font-size:14px;margin:0;line-height:1.6}.intro-pill{flex-shrink:0;border:1px solid rgba(75,232,194,.3);border-radius:30px;background:#15322f;color:#8cebd9;padding:11px 13px;font-size:10px}.twinkle{font-size:15px;margin-right:3px}.main-layout{display:grid;grid-template-columns:minmax(0,1.09fr) minmax(0,.91fr);gap:25px}.board-panel,.controls-panel{background:linear-gradient(160deg,rgba(23,36,59,.96),rgba(14,24,42,.96));border:1px solid rgba(164,184,213,.12);border-radius:22px;padding:26px;box-shadow:0 16px 45px rgba(0,0,0,.13);min-width:0}.section-heading{margin-bottom:18px}.section-heading h3,.number-heading h3{font-size:20px;letter-spacing:-.45px;margin:3px 0 0}.board-counter{color:#c0cce0;letter-spacing:.02em;background:#263349;border:1px solid #34435a;padding:9px 11px;border-radius:99px;white-space:nowrap}.board-frame{border-radius:11px;padding:7px;background:linear-gradient(135deg,#536678,#2c4664);box-shadow:0 8px 25px rgba(0,0,0,.18)}.sudoku-board{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));aspect-ratio:1;background:#f5f7fa;overflow:hidden;border:2px solid #2e455c;border-radius:5px}.cell{border:0;border-right:1px solid #c9d2df;border-bottom:1px solid #c9d2df;color:#203552;font-family:inherit;font-size:clamp(16px,2.25vw,27px);font-weight:750;line-height:1;background:#f7f9fc;width:100%;height:100%;min-width:0;min-height:0;padding:0;text-align:center;border-radius:0;outline:0;caret-color:transparent;appearance:none;-webkit-appearance:none;transition:background-color .12s;touch-action:manipulation}.cell:nth-child(9n){border-right:0}.cell:nth-child(n+73){border-bottom:0}.cell[data-c="2"],.cell[data-c="5"]{border-right:3px solid #506780}.cell[data-r="2"],.cell[data-r="5"]{border-bottom:3px solid #506780}.cell:focus,.cell.selected{background:#dff9f0!important;box-shadow:inset 0 0 0 2px #14a88c;position:relative;z-index:2}.cell.same{background:#e5eef8}.cell.related{background:#eef3f8}.cell.scanned{color:#2e69bd}.cell.solved{color:#008e7d;background:#f0fcf9}.cell.hint-cell{color:#008e7d;background:#bff9e8!important}.cell.conflict{color:#bc393b;background:#ffe0e0!important}.cell.low-confidence:not(.selected):not(.conflict){background:#fff0d4;color:#a86a1b}.board-legend{display:flex;gap:15px;flex-wrap:wrap;margin:15px 0 0;justify-content:center}.board-legend span{font-size:11px;color:#a4b4cc;display:flex;align-items:center;gap:6px}.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#d1dcef}.scanned-dot{background:#719efc}.solved-dot{background:#4be8c2}.issue-dot{background:#efba66}.status{margin-top:17px;display:flex;align-items:flex-start;gap:10px;padding:14px 15px;background:#182c3d;border-radius:12px;border:1px solid #294353;color:#a5d9dd;font-size:13px;line-height:1.55;min-height:52px}.status svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;color:var(--teal)}.status.error{background:#3a2634;border-color:#714651;color:#ffc3bc}.status.error svg{color:#ffaaa3}.status.success{background:#15382f;border-color:#2d6958;color:#b8f7e5}.tiny-help{font-size:11px;color:var(--muted)}.action-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.action-button,.number-btn,.icon-button,.capture-button{appearance:none;display:flex;align-items:center;justify-content:center;border:1px solid #35475d;background:#223149;color:#c7d6e9;cursor:pointer;user-select:none;transition:transform .12s,background .12s,border-color .12s;touch-action:manipulation}.action-button{min-width:0;aspect-ratio:1;border-radius:15px;flex-direction:column;gap:11px;font-weight:650;font-size:12px}.action-button svg{width:25px;height:25px}.action-button:hover,.number-btn:hover,.icon-button:hover{background:#2d4261;border-color:#5f819f;transform:translateY(-1px)}button:active{transform:scale(.96)!important}button:focus-visible{outline:2px solid var(--teal);outline-offset:3px}.primary-action{background:linear-gradient(145deg,#65ecd2,#29c8b8);color:#0a2632;border-color:transparent;box-shadow:0 10px 25px rgba(50,213,183,.2)}.primary-action:hover{background:linear-gradient(145deg,#86f6dd,#34d4c4);border-color:transparent}.warning-action{color:#f6b3b5}.number-heading{margin:30px 0 14px}.number-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.number-btn{aspect-ratio:1;min-width:0;border-radius:13px;background:#1c2b43;font-size:24px;font-weight:750;color:#e8f2ff}.number-btn.erase{color:#ffaaa3}.number-btn.erase svg{height:24px;width:24px}.helper-note{font-size:11px;line-height:1.65;letter-spacing:0;font-weight:400;color:var(--muted);margin:21px 0 0}.helper-bullet{color:var(--teal)}.recent-photo{margin-top:18px;padding:14px;border-radius:14px;border:1px solid #2c485a;background:#122735}.recent-photo[hidden]{display:none}.photo-heading{color:#98baca;letter-spacing:.06em;margin-bottom:10px}.recent-photo canvas{display:block;max-width:100%;width:175px;border-radius:6px;margin:auto}.recent-photo p{font-size:11px;color:#a2bacb;line-height:1.6;margin:11px 0 0;text-align:center}footer{display:flex;justify-content:space-between;gap:15px;margin-top:26px;letter-spacing:0;color:#667e9a;font-size:11px;font-weight:450}footer span:last-child{font-weight:700;letter-spacing:.1em;font-size:9px}.modal[hidden]{display:none}.modal{position:fixed;z-index:80;inset:0;display:grid;place-items:center;padding:16px}.modal-backdrop{position:absolute;inset:0;background:rgba(5,10,20,.82);backdrop-filter:blur(8px)}.camera-dialog,.progress-dialog{position:relative;z-index:1;width:min(100%,480px);background:#18283d;border:1px solid #496076;border-radius:20px;padding:19px;box-shadow:0 24px 65px rgba(0,0,0,.44)}.dialog-head{margin-bottom:16px}.dialog-head h3,.progress-dialog h3{font-size:21px;margin:5px 0 0}.icon-button{width:46px;height:46px;aspect-ratio:1;border-radius:13px}.icon-button svg{width:21px;height:21px}.camera-viewport{position:relative;width:100%;aspect-ratio:1;background:#0a1321;overflow:hidden;border-radius:12px}.camera-viewport video{width:100%;height:100%;object-fit:cover}.camera-guide{position:absolute;inset:10%;border:1px solid rgba(145,251,222,.55);pointer-events:none}.c{position:absolute;width:33px;height:33px;border:4px solid var(--teal)}.tl{left:-2px;top:-2px;border-right:0;border-bottom:0}.tr{right:-2px;top:-2px;border-left:0;border-bottom:0}.bl{left:-2px;bottom:-2px;border-right:0;border-top:0}.br{right:-2px;bottom:-2px;border-left:0;border-top:0}.camera-tip{color:#abbcd0;text-align:center;font-size:12px}.camera-buttons{display:flex;justify-content:center;gap:24px;align-items:center;position:relative}.camera-buttons .icon-button{position:absolute;right:8px}.capture-button{height:69px;width:69px;aspect-ratio:1;border:4px solid #9fede1;border-radius:50%;background:transparent}.capture-button span{display:block;background:var(--teal);border-radius:50%;width:51px;height:51px}.progress-dialog{text-align:center;padding:40px 28px}.loading-orb{width:78px;height:78px;border-radius:24px;display:grid;place-items:center;background:#185144;color:var(--teal);margin:0 auto 24px;animation:breathe 2s ease-in-out infinite}.loading-orb svg{height:38px;width:38px}@keyframes breathe{50%{box-shadow:0 0 30px rgba(56,237,183,.22);transform:scale(1.04)}}.progress-dialog p{min-height:32px;color:#aec3d5;font-size:13px;line-height:1.6}.progress-track{height:7px;border-radius:10px;background:#344b5d;overflow:hidden;margin-top:20px}.progress-track>div{height:100%;background:linear-gradient(90deg,#36bbad,#7cf0d2);width:0%;transition:width .2s}.cancel-scan{margin:26px auto 0;display:block;border:1px solid #415b70;background:#28394e;color:#deebf6;border-radius:9px;padding:10px 16px;cursor:pointer}body.modal-open{overflow:hidden}@media(max-width:790px){.app-shell{padding:18px 14px 24px;max-width:600px}.intro{margin:25px 0 22px;align-items:flex-start}.intro-pill{display:none}.intro h2{font-size:25px}.main-layout{grid-template-columns:minmax(0,1fr);gap:17px}.board-panel,.controls-panel{padding:18px;border-radius:18px}.action-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.action-button{gap:7px}.number-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.number-btn{font-size:21px}footer span:last-child{display:none}}@media(max-width:410px){.app-shell{padding:15px 10px 20px}.board-panel,.controls-panel{padding:13px}.top-meta{display:none}.brand-mark{width:44px;height:44px}.intro h2{font-size:23px}.intro p{font-size:12px}.board-frame{padding:5px}.sudoku-board{border-width:1px}.cell{font-size:clamp(17px,5.4vw,24px)}.cell[data-c="2"],.cell[data-c="5"]{border-right-width:2px}.cell[data-r="2"],.cell[data-r="5"]{border-bottom-width:2px}.action-grid,.number-grid{gap:8px}.action-button{font-size:11px;border-radius:11px}.action-button svg{width:22px;height:22px}.board-legend{gap:10px}.board-counter{font-size:9px;padding:7px}.number-btn{border-radius:11px}}
+
+</style>
+</head>
+<body>
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M7 3H5a2 2 0 0 0-2 2v2m14-4h2a2 2 0 0 1 2 2v2M3 17v2a2 2 0 0 0 2 2h2m14-4v2a2 2 0 0 1-2 2h-2M4 12h16M8 8v8m8-8v8"/></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.9 6.1L20 11l-6.1 1.9L12 19l-1.9-6.1L4 11l6.1-1.9L12 3ZM19 18l.6 1.4L21 20l-1.4.6L19 22l-.6-1.4L17 20l1.4-.6L19 18Z"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h9a7 7 0 1 1 0 14h-2"/></symbol>
+    <symbol id="i-delete" viewBox="0 0 24 24"><path d="M4 7h16M10 4h4m-8 3 1 14h10l1-14M10 11v6m4-6v6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4m-2-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7h3l2-3h6l2 3h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 5v6h-6M4 19v-6h6M5.6 9A7 7 0 0 1 18.5 6.6L20 11M4 13l1.5 4.4A7 7 0 0 0 18.4 15"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18m6-18v18M3 9h18M3 15h18"/></symbol>
+  </svg>
+  <main class="app-shell">
+    <header class="masthead">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"><svg><use href="#i-grid"/></svg></div><div><div class="brand-kicker">SMART PUZZLE TOOL</div><h1>Sudoku <span>Studio</span></h1></div></div>
+      <div class="top-meta"><span class="online-dot"></span><span>9 × 9 CLASSIC</span></div>
+    </header>
+    <div class="intro"><div><h2>Every puzzle. One solution away.</h2><p>Type a puzzle, scan it with your camera, or import a photo. We'll do the rest.</p></div><div class="intro-pill"><span class="twinkle">✦</span> Image-to-grid OCR</div></div>
+    <div class="main-layout">
+      <section class="board-panel" aria-label="Sudoku puzzle">
+        <div class="section-heading"><div><span class="eyebrow">YOUR PUZZLE</span><h3>The board</h3></div><span class="board-counter" id="filled-count">0 / 81 filled</span></div>
+        <div class="board-frame"><div id="sudoku-board" class="sudoku-board" role="grid" aria-label="Sudoku 9 by 9"></div></div>
+        <div class="board-legend"><span><i class="legend-dot original-dot"></i>Entered</span><span><i class="legend-dot scanned-dot"></i>Scanned</span><span><i class="legend-dot solved-dot"></i>Solved</span><span><i class="legend-dot issue-dot"></i>Review</span></div>
+        <div class="status" id="status" role="status" aria-live="polite"><svg aria-hidden="true"><use href="#i-spark"/></svg><span>Ready for your next puzzle.</span></div>
+      </section>
+      <aside class="controls-panel">
+        <div class="section-heading"><div><span class="eyebrow">YOUR TOOLKIT</span><h3>Actions</h3></div><span class="tiny-help">Tap a cell first</span></div>
+        <div class="action-grid">
+          <button id="solve-btn" class="action-button primary-action" type="button"><svg><use href="#i-spark"/></svg><span>Solve</span></button>
+          <button id="scan-btn" class="action-button" type="button"><svg><use href="#i-camera"/></svg><span>Scan</span></button>
+          <button id="import-btn" class="action-button" type="button"><svg><use href="#i-photo"/></svg><span>Import</span></button>
+          <button id="hint-btn" class="action-button" type="button"><svg><use href="#i-bulb"/></svg><span>Hint</span></button>
+          <button id="check-btn" class="action-button" type="button"><svg><use href="#i-check"/></svg><span>Check</span></button>
+          <button id="undo-btn" class="action-button" type="button"><svg><use href="#i-undo"/></svg><span>Undo</span></button>
+          <button id="clear-btn" class="action-button warning-action" type="button"><svg><use href="#i-delete"/></svg><span>Clear</span></button>
+          <button id="sample-btn" class="action-button" type="button"><svg><use href="#i-play"/></svg><span>Sample</span></button>
+        </div>
+        <div class="number-heading"><div><span class="eyebrow">QUICK INPUT</span><h3>Number pad</h3></div><span class="tiny-help">Keyboard works too</span></div>
+        <div class="number-grid" id="number-pad"></div>
+        <p class="helper-note"><span class="helper-bullet">✦</span> Scans are processed on your device. OCR needs internet the first time it loads.</p>
+        <div class="recent-photo" id="photo-card" hidden><div class="photo-heading"><span>LAST SCAN</span><span id="photo-details">Preview</span></div><canvas id="scan-preview" width="900" height="900" aria-label="Detected Sudoku photo"></canvas><p>Numbers copied into the board. You can tap a cell to correct anything.</p></div>
+      </aside>
+    </div>
+    <footer><span>Made for every difficulty, from easy to expert.</span><span>CLASSIC SUDOKU SOLVER</span></footer>
+  </main>
+  <input id="import-input" type="file" accept="image/*" hidden>
+  <input id="capture-input" type="file" accept="image/*" capture="environment" hidden>
+  <div id="camera-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="camera-title">
+    <div class="modal-backdrop" data-close-camera></div><div class="camera-dialog"><div class="dialog-head"><div><span class="eyebrow">CAMERA SCAN</span><h3 id="camera-title">Fit puzzle in frame</h3></div><button id="close-camera" class="icon-button" aria-label="Close camera" type="button"><svg><use href="#i-close"/></svg></button></div><div class="camera-viewport"><video id="camera-video" autoplay muted playsinline></video><div class="camera-guide" aria-hidden="true"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span></div></div><p class="camera-tip">Keep all four corners visible and hold your device steady.</p><div class="camera-buttons"><button id="take-photo" class="capture-button" type="button" aria-label="Capture Sudoku photo"><span></span></button><button id="camera-file" class="icon-button" type="button" aria-label="Open phone camera instead"><svg><use href="#i-photo"/></svg></button></div></div>
+  </div>
+  <div id="scan-overlay" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="scan-title"><div class="modal-backdrop"></div><div class="progress-dialog"><div class="loading-orb"><svg><use href="#i-scan"/></svg></div><span class="eyebrow">IMAGE RECOGNITION</span><h3 id="scan-title">Reading your Sudoku</h3><p id="scan-progress-text">Finding the board...</p><div class="progress-track"><div id="scan-progress-bar"></div></div><button class="cancel-scan" type="button" id="cancel-scan">Cancel scan</button></div></div>
+  <script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const boardEl = $('sudoku-board');
+  const messageEl = $('status');
+  const STORAGE_KEY = 'sudoku-studio-v1';
+  const FULL_MASK = 0x1ff;
+  const boardInputs = [];
+  let values = Array(81).fill(0);
+  let origins = Array(81).fill('');
+  let uncertain = new Set();
+  let selected = 0;
+  let undoStack = [];
+  let cameraStream = null;
+  let scanToken = 0;
+  let working = false;
+  let sampleIndex = 0;
+
+  const examples = [
+    '530070000600195000098000060800060003400803001700020006060000280000419005000080079',
+    '000260701680070090190004500820100040004602900050003028009300074040050036703018000',
+    '800000000003600000070090200050007000000045700000100030001000068008500010090000400',
+    '000000012000060000450000300000000003100800005009300000001070900060001040200000008'
+  ];
+
+  function cloneState() { return {values: values.slice(), origins: origins.slice(), uncertain: [...uncertain]}; }
+  function pushUndo() { undoStack.push(cloneState()); if (undoStack.length > 80) undoStack.shift(); }
+  function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cloneState())); } catch {} }
+  function restore() {
+    try {
+      const x = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (x && Array.isArray(x.values) && x.values.length === 81 && x.values.every(v => Number.isInteger(v) && v >= 0 && v <= 9)) {
+        values = x.values;
+        origins = Array.isArray(x.origins) && x.origins.length === 81 ? x.origins : Array(81).fill('manual');
+        uncertain = new Set(Array.isArray(x.uncertain) ? x.uncertain.filter(i => i >= 0 && i < 81) : []);
+      }
+    } catch {}
+  }
+  function showMessage(text, type = 'info') {
+    messageEl.className = 'status' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
+    messageEl.querySelector('span').textContent = text;
+  }
+  function conflictsFor(grid) {
+    const bad = new Set();
+    const inspect = list => {
+      const found = new Map();
+      for (const i of list) {
+        const n = grid[i]; if (!n) continue;
+        if (found.has(n)) { bad.add(i); bad.add(found.get(n)); }
+        else found.set(n, i);
+      }
+    };
+    for (let r = 0; r < 9; r++) inspect(Array.from({length: 9}, (_, c) => 9 * r + c));
+    for (let c = 0; c < 9; c++) inspect(Array.from({length: 9}, (_, r) => 9 * r + c));
+    for (let br = 0; br < 9; br += 3) for (let bc = 0; bc < 9; bc += 3) {
+      const cells = [];
+      for (let dr = 0; dr < 3; dr++) for (let dc = 0; dc < 3; dc++) cells.push((br + dr) * 9 + bc + dc);
+      inspect(cells);
+    }
+    return bad;
+  }
+  function render() {
+    const bad = conflictsFor(values);
+    const sr = Math.floor(selected / 9), sc = selected % 9;
+    for (let i = 0; i < 81; i++) {
+      const el = boardInputs[i], r = Math.floor(i / 9), c = i % 9;
+      const digit = values[i] ? String(values[i]) : '';
+      if (el.value !== digit) el.value = digit;
+      el.className = 'cell';
+      if (origins[i] === 'scanned') el.classList.add('scanned');
+      else if (origins[i] === 'solved' || origins[i] === 'hint') el.classList.add('solved');
+      if (origins[i] === 'hint') el.classList.add('hint-cell');
+      if (uncertain.has(i) && values[i]) el.classList.add('low-confidence');
+      if (r === sr || c === sc || (Math.floor(r / 3) === Math.floor(sr / 3) && Math.floor(c / 3) === Math.floor(sc / 3))) el.classList.add('related');
+      if (i !== selected && values[selected] && values[i] === values[selected]) el.classList.add('same');
+      if (bad.has(i)) el.classList.add('conflict');
+      if (i === selected) el.classList.add('selected');
+      el.setAttribute('aria-label', `Row ${r + 1}, column ${c + 1}${values[i] ? ', ' + values[i] : ', empty'}`);
+    }
+    $('filled-count').textContent = values.filter(Boolean).length + ' / 81 filled';
+  }
+  function selectCell(i, focus = false) {
+    selected = Math.max(0, Math.min(80, i));
+    render();
+    if (focus) boardInputs[selected].focus({preventScroll: true});
+  }
+  function clearSolved() {
+    for (let i = 0; i < 81; i++) if (origins[i] === 'solved') { values[i] = 0; origins[i] = ''; }
+  }
+  function enter(i, n) {
+    if (working) return;
+    n = Number(n) || 0;
+    if (n < 0 || n > 9) return;
+    if (values[i] === n && origins[i] === 'manual') return;
+    pushUndo();
+    clearSolved();
+    values[i] = n;
+    origins[i] = n ? 'manual' : '';
+    uncertain.delete(i);
+    selected = i;
+    render(); save();
+    const bad = conflictsFor(values);
+    if (bad.size) showMessage('There are repeated numbers in a row, column, or 3×3 box. Check the highlighted cells.', 'error');
+    else showMessage(n ? `Placed ${n} in row ${Math.floor(i / 9) + 1}, column ${i % 9 + 1}.` : 'Cell erased.');
+  }
+
+  function initBoard() {
+    for (let i = 0; i < 81; i++) {
+      const el = document.createElement('input');
+      el.type = 'text'; el.inputMode = 'numeric'; el.pattern = '[1-9]'; el.autocomplete = 'off'; el.maxLength = 1; el.spellcheck = false;
+      el.dataset.r = String(Math.floor(i / 9)); el.dataset.c = String(i % 9);
+      el.setAttribute('role', 'gridcell');
+      el.addEventListener('focus', () => selectCell(i));
+      el.addEventListener('click', () => selectCell(i));
+      el.addEventListener('input', () => {
+        const x = el.value.replace(/[^1-9]/g, '');
+        enter(i, x ? Number(x[x.length - 1]) : 0);
+      });
+      el.addEventListener('keydown', e => {
+        let next = null;
+        if (e.key === 'ArrowUp') next = (i + 72) % 81;
+        else if (e.key === 'ArrowDown') next = (i + 9) % 81;
+        else if (e.key === 'ArrowLeft') next = Math.floor(i / 9) * 9 + (i % 9 + 8) % 9;
+        else if (e.key === 'ArrowRight') next = Math.floor(i / 9) * 9 + (i % 9 + 1) % 9;
+        if (next !== null) { e.preventDefault(); selectCell(next, true); }
+        else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') { e.preventDefault(); enter(i, 0); }
+      });
+      boardEl.appendChild(el); boardInputs.push(el);
+    }
+    const pad = $('number-pad');
+    for (let i = 1; i <= 9; i++) {
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'number-btn'; btn.textContent = String(i);
+      btn.setAttribute('aria-label', `Enter ${i}`);
+      btn.addEventListener('click', () => enter(selected, i)); pad.appendChild(btn);
+    }
+    const erase = document.createElement('button'); erase.type = 'button'; erase.className = 'number-btn erase'; erase.setAttribute('aria-label', 'Erase selected cell'); erase.innerHTML = '⌫';
+    erase.addEventListener('click', () => enter(selected, 0)); pad.appendChild(erase);
+    restore(); render();
+  }
+
+  // Exact solver for standard classic Sudoku. Reports 0, 1, or 2+ solutions.
+  function solveGrid(start, solutionLimit = 2) {
+    const grid = start.slice();
+    const rowMask = new Int32Array(9), colMask = new Int32Array(9), boxMask = new Int32Array(9);
+    const boxOf = i => Math.floor(Math.floor(i / 9) / 3) * 3 + Math.floor((i % 9) / 3);
+    for (let i = 0; i < 81; i++) {
+      const n = grid[i]; if (!n) continue;
+      if (!Number.isInteger(n) || n < 1 || n > 9) return {count: 0, invalid: true};
+      const r = Math.floor(i / 9), c = i % 9, b = boxOf(i), bit = 1 << (n - 1);
+      if ((rowMask[r] | colMask[c] | boxMask[b]) & bit) return {count: 0, invalid: true};
+      rowMask[r] |= bit; colMask[c] |= bit; boxMask[b] |= bit;
+    }
+    const bitCount = mask => { let n = 0; for (; mask; mask &= mask - 1) n++; return n; };
+    let count = 0, first = null, nodes = 0;
+    function dfs() {
+      let best = -1, options = 0, min = 10;
+      for (let i = 0; i < 81; i++) {
+        if (grid[i]) continue;
+        const r = Math.floor(i / 9), c = i % 9, b = boxOf(i);
+        const candidate = FULL_MASK & ~(rowMask[r] | colMask[c] | boxMask[b]);
+        const n = bitCount(candidate);
+        if (n === 0) return;
+        if (n < min) { min = n; best = i; options = candidate; if (n === 1) break; }
+      }
+      if (best === -1) { count++; if (!first) first = grid.slice(); return; }
+      const r = Math.floor(best / 9), c = best % 9, b = boxOf(best);
+      while (options && count < solutionLimit) {
+        const bit = options & -options; options -= bit;
+        const digit = 32 - Math.clz32(bit);
+        grid[best] = digit; rowMask[r] |= bit; colMask[c] |= bit; boxMask[b] |= bit;
+        dfs();
+        grid[best] = 0; rowMask[r] ^= bit; colMask[c] ^= bit; boxMask[b] ^= bit;
+      }
+    }
+    dfs();
+    return {count, first, invalid: false};
+  }
+  function solve() {
+    if (working) return;
+    const before = values.map((v, i) => origins[i] === 'solved' ? 0 : v);
+    const result = solveGrid(before);
+    if (result.invalid) return showMessage('Cannot solve: a row, column, or 3×3 box contains conflicting numbers.', 'error');
+    if (!result.count) return showMessage('This set of numbers has no valid classic Sudoku solution. Double-check your entries.', 'error');
+    const open = before.filter(v => !v).length;
+    if (!open) return showMessage('Puzzle is already complete and valid!', 'success');
+    pushUndo(); values = result.first;
+    origins = origins.map((o, i) => before[i] ? (o === 'solved' ? 'manual' : o) : 'solved');
+    uncertain = new Set([...uncertain].filter(i => before[i]));
+    render(); save();
+    showMessage(result.count > 1 ? 'Solved! Your clues allow multiple answers. This is one valid completion.' : 'Solved! All 81 cells form a valid Sudoku solution.', 'success');
+  }
+  function hint() {
+    if (working) return;
+    const input = values.map((v, i) => origins[i] === 'solved' ? 0 : v);
+    const outcome = solveGrid(input);
+    if (outcome.invalid || !outcome.count) return showMessage('Fix conflicts or incorrect clues to get a hint.', 'error');
+    let i = !input[selected] ? selected : input.findIndex(v => v === 0);
+    if (i < 0) return showMessage('Nothing to hint: the board is filled!', 'success');
+    pushUndo(); clearSolved(); values[i] = outcome.first[i]; origins[i] = 'hint'; uncertain.delete(i);
+    selected = i; render(); save();
+    showMessage(`Hint: ${values[i]} goes in row ${Math.floor(i / 9) + 1}, column ${i % 9 + 1}.` + (outcome.count > 1 ? ' Multiple solutions are possible.' : ''), 'success');
+  }
+  function check() {
+    const invalid = conflictsFor(values);
+    if (invalid.size) return showMessage(`${invalid.size} conflicting cell(s). Red highlights show where a number repeats.`, 'error');
+    const raw = values.map((v, i) => origins[i] === 'solved' ? 0 : v);
+    const result = solveGrid(raw);
+    if (!result.count) return showMessage('No solution is possible with the current numbers, even though there are no direct duplicates.', 'error');
+    const count = values.filter(Boolean).length;
+    if (count === 81) showMessage('Perfect! Your completed Sudoku follows all the rules.', 'success');
+    else showMessage(`Looks valid so far: ${count}/81 filled. ${result.count > 1 ? 'More than one solution is possible.' : 'A solution exists.'}`, 'success');
+  }
+  function undo() {
+    if (working) return;
+    const prev = undoStack.pop(); if (!prev) return showMessage('No changes to undo.');
+    values = prev.values; origins = prev.origins; uncertain = new Set(prev.uncertain);
+    render(); save(); showMessage('Previous board restored.');
+  }
+  function clear() {
+    if (working) return;
+    if (!values.some(Boolean)) return showMessage('The grid is already empty.');
+    pushUndo(); values = Array(81).fill(0); origins = Array(81).fill(''); uncertain = new Set();
+    render(); save(); showMessage('Board cleared. Undo is available.');
+  }
+  function sample() {
+    if (working) return;
+    const x = examples[sampleIndex++ % examples.length];
+    pushUndo(); values = [...x].map(Number); origins = values.map(v => v ? 'manual' : ''); uncertain = new Set();
+    render(); save(); showMessage('Sample puzzle loaded. Tap Solve, or try filling it yourself.');
+  }
+
+  function loadScript(src, timeoutMs = 20000) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script'); let done = false;
+      const timer = setTimeout(() => finish(new Error('Script timeout: ' + src)), timeoutMs);
+      function finish(error) { if (done) return; done = true; clearTimeout(timer); if (error) reject(error); else resolve(); }
+      s.src = src; s.async = true; s.onload = () => finish(); s.onerror = () => finish(new Error('Could not load ' + src));
+      document.head.appendChild(s);
+    });
+  }
+  let tesseractLoading = null;
+  async function getTesseract() {
+    if (window.Tesseract?.createWorker) return window.Tesseract;
+    if (!tesseractLoading) tesseractLoading = (async () => {
+      try { await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'); }
+      catch { await loadScript('https://unpkg.com/tesseract.js@5.1.1/dist/tesseract.min.js'); }
+      if (!window.Tesseract?.createWorker) throw new Error('Optical character recognition could not be loaded. Connect to the internet and try again.');
+      return window.Tesseract;
+    })().catch(err => { tesseractLoading = null; throw err; });
+    return tesseractLoading;
+  }
+  let cvLoading = null;
+  async function getOpenCV() {
+    if (window.cv?.Mat) return window.cv;
+    if (!cvLoading) cvLoading = (async () => {
+      await loadScript('https://docs.opencv.org/4.10.0/opencv.js', 23000);
+      let runtime = window.cv;
+      if (runtime && typeof runtime.then === 'function') runtime = await runtime;
+      else if (runtime && !runtime.Mat) runtime = await new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('OpenCV runtime timeout')), 18000);
+        runtime.onRuntimeInitialized = () => { clearTimeout(timer); resolve(runtime); };
+      });
+      if (!runtime?.Mat) throw new Error('OpenCV unavailable');
+      return runtime;
+    })().catch(() => { cvLoading = null; return null; });
+    return cvLoading;
+  }
+  function setProgress(text, pct) { $('scan-progress-text').textContent = text; $('scan-progress-bar').style.width = `${Math.max(0, Math.min(100, pct))}%`; }
+  function scanningState(active) {
+    working = active;
+    $('scan-overlay').hidden = !active;
+    document.body.classList.toggle('modal-open', active || !$('camera-modal').hidden);
+  }
+  function assertNotCancelled(token) { if (scanToken !== token) throw new Error('Scan cancelled'); }
+  async function canvasFromFile(file) {
+    if (!file || !file.type.startsWith('image/')) throw new Error('Please choose a photo (JPG, PNG, or another image type).');
+    if (file.size > 30 * 1024 * 1024) throw new Error('This image is very large. Choose a photo smaller than 30 MB.');
+    let bitmap;
+    try { bitmap = await createImageBitmap(file); }
+    catch {
+      bitmap = await new Promise((resolve, reject) => {
+        const img = new Image(), url = URL.createObjectURL(file);
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not open this image.')); };
+        img.src = url;
+      });
+    }
+    const w = bitmap.width, h = bitmap.height, scale = Math.min(1, 1500 / Math.max(w, h));
+    const c = document.createElement('canvas'); c.width = Math.round(w * scale); c.height = Math.round(h * scale);
+    c.getContext('2d', {willReadFrequently: true}).drawImage(bitmap, 0, 0, c.width, c.height);
+    if (typeof bitmap.close === 'function') bitmap.close();
+    return c;
+  }
+  function orderCorners(p) {
+    const bySum = [...p].sort((a, b) => a.x + a.y - b.x - b.y);
+    const tl = bySum[0], br = bySum[3];
+    const left = bySum.slice(1, 3).sort((a, b) => (b.x - b.y) - (a.x - a.y));
+    return [tl, left[0], br, left[1]]; // top-left, top-right, bottom-right, bottom-left
+  }
+  function boardFromCorners(cv, src, corners, outputSize = 900) {
+    const pts = orderCorners(corners);
+    const from = cv.matFromArray(4, 1, cv.CV_32FC2, pts.flatMap(p => [p.x, p.y]));
+    const to = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, outputSize - 1, 0, outputSize - 1, outputSize - 1, 0, outputSize - 1]);
+    const transform = cv.getPerspectiveTransform(from, to), out = new cv.Mat();
+    cv.warpPerspective(src, out, transform, new cv.Size(outputSize, outputSize), cv.INTER_LINEAR, cv.BORDER_CONSTANT, new cv.Scalar(255, 255, 255, 255));
+    from.delete(); to.delete(); transform.delete();
+    return out;
+  }
+  function gridStrength(cv, src, corners) {
+    const warped = boardFromCorners(cv, src, corners, 450), gray = new cv.Mat();
+    cv.cvtColor(warped, gray, cv.COLOR_RGBA2GRAY);
+    const data = gray.data, w = 450;
+    let edgeInk = 0, betweenInk = 0, count = 0;
+    for (let k = 1; k <= 8; k++) {
+      for (let xy = 26; xy <= 423; xy += 9) {
+        for (let delta = -2; delta <= 2; delta += 2) {
+          edgeInk += data[(k * 50 + delta) * w + xy] < 155 ? 1 : 0;
+          edgeInk += data[xy * w + k * 50 + delta] < 155 ? 1 : 0;
+          betweenInk += data[(k * 50 + 24 + delta) * w + xy] < 155 ? 1 : 0;
+          betweenInk += data[xy * w + k * 50 + 24 + delta] < 155 ? 1 : 0;
+          count += 2;
+        }
+      }
+    }
+    warped.delete(); gray.delete();
+    return (edgeInk - betweenInk) / Math.max(count, 1);
+  }
+  function fallbackCrop(input) {
+    // Best-effort center crop when perspective detection is unavailable.
+    const out = document.createElement('canvas'); out.width = out.height = 900;
+    const context = out.getContext('2d', {willReadFrequently: true});
+    const w = input.width, h = input.height;
+    const small = Math.min(w, h);
+    const c = input.getContext('2d', {willReadFrequently: true});
+    const iw = Math.min(550, w), ih = Math.min(550, h);
+    const shrink = document.createElement('canvas'); shrink.width = iw; shrink.height = ih;
+    const ic = shrink.getContext('2d', {willReadFrequently: true}); ic.drawImage(input, 0, 0, iw, ih);
+    const {data} = ic.getImageData(0, 0, iw, ih);
+    const rows = new Uint16Array(ih), cols = new Uint16Array(iw);
+    for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) {
+      const j = (y * iw + x) * 4;
+      if ((data[j] * .299 + data[j + 1] * .587 + data[j + 2] * .114) < 130) { rows[y]++; cols[x]++; }
+    }
+    const findPeaks = (arr, size) => {
+      const threshold = Math.max(size * .18, Math.max(...arr) * .52);
+      const indices = []; for (let i = 0; i < arr.length; i++) if (arr[i] > threshold) indices.push(i);
+      if (indices.length < 4) return null;
+      const low = indices[Math.floor(indices.length * .04)], high = indices[Math.floor(indices.length * .96)];
+      return high - low > arr.length * .30 ? [low, high] : null;
+    };
+    const xx = findPeaks(cols, ih), yy = findPeaks(rows, iw);
+    let x, y, side;
+    if (xx && yy && w / h > .87 && w / h < 1.14 && (xx[1] - xx[0]) / iw > .87 && (yy[1] - yy[0]) / ih > .87) {
+      side = small; x = (w - side) / 2; y = (h - side) / 2;
+    } else if (xx && yy) {
+      const left = xx[0] * w / iw, right = xx[1] * w / iw;
+      const top = yy[0] * h / ih, bottom = yy[1] * h / ih;
+      side = Math.max(right - left, bottom - top) * 1.025;
+      x = (left + right - side) / 2; y = (top + bottom - side) / 2;
+    } else { side = small * .94; x = (w - side) / 2; y = (h - side) / 2; }
+    context.fillStyle = 'white'; context.fillRect(0, 0, 900, 900);
+    context.drawImage(input, x, y, side, side, 0, 0, 900, 900);
+    return out;
+  }
+  async function isolateBoard(imageCanvas, cv) {
+    if (!cv?.Mat) return {canvas: fallbackCrop(imageCanvas), found: false};
+    const mats = [];
+    try {
+      const src = cv.imread(imageCanvas); mats.push(src);
+      const gray = new cv.Mat(), blur = new cv.Mat(), binary = new cv.Mat(), contours = new cv.MatVector(), hierarchy = new cv.Mat();
+      mats.push(gray, blur, binary, contours, hierarchy);
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+      cv.GaussianBlur(gray, blur, new cv.Size(5, 5), 0);
+      cv.adaptiveThreshold(blur, binary, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3);
+      cv.findContours(binary, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+      const candidates = [], minArea = src.rows * src.cols * .09;
+      for (let i = 0; i < contours.size(); i++) {
+        const contour = contours.get(i);
+        const area = cv.contourArea(contour);
+        if (area > minArea && area < src.rows * src.cols * .99) {
+          const poly = new cv.Mat();
+          cv.approxPolyDP(contour, poly, .025 * cv.arcLength(contour, true), true);
+          if (poly.rows === 4 && cv.isContourConvex(poly)) {
+            const p = [];
+            for (let k = 0; k < 4; k++) p.push({x: poly.intPtr(k, 0)[0], y: poly.intPtr(k, 0)[1]});
+            const o = orderCorners(p);
+            const len = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+            const ratio = (len(o[0], o[1]) + len(o[2], o[3])) / (len(o[1], o[2]) + len(o[3], o[0]));
+            if (ratio >= .55 && ratio <= 1.85) candidates.push({points: p, area, ratio});
+          }
+          poly.delete();
+        }
+        contour.delete();
+      }
+      candidates.sort((a, b) => b.area - a.area);
+      let best = null, bestScore = -.1;
+      for (const candidate of candidates.slice(0, 16)) {
+        const contrast = gridStrength(cv, src, candidate.points);
+        const squareness = Math.min(candidate.ratio, 1 / candidate.ratio);
+        const score = contrast * 6 + .20 * candidate.area / (src.rows * src.cols) + .2 * squareness;
+        if (score > bestScore) {best = candidate; bestScore = score;}
+      }
+      if (!best || bestScore < .26) return {canvas: fallbackCrop(imageCanvas), found: false};
+      const outMat = boardFromCorners(cv, src, best.points);
+      const result = document.createElement('canvas'); result.width = 900; result.height = 900;
+      cv.imshow(result, outMat); outMat.delete();
+      return {canvas: result, found: true};
+    } catch (err) {
+      console.warn('Perspective correction fallback:', err);
+      return {canvas: fallbackCrop(imageCanvas), found: false};
+    } finally { for (const mat of mats) { try { mat.delete(); } catch {} } }
+  }
+  function makeDigitCanvas(boardCtx, i) {
+    const r = Math.floor(i / 9), col = i % 9;
+    const sx = col * 100 + 20, sy = r * 100 + 20, dim = 60;
+    const img = boardCtx.getImageData(sx, sy, dim, dim).data;
+    const light = new Uint8Array(dim * dim); const histogram = new Int32Array(256);
+    for (let j = 0; j < dim * dim; j++) {
+      const z = j * 4, lum = Math.round(img[z] * .299 + img[z + 1] * .587 + img[z + 2] * .114);
+      light[j] = lum; histogram[lum]++;
+    }
+    let median = 255, sum = 0;
+    for (let k = 0; k < 256; k++) { sum += histogram[k]; if (sum >= dim * dim / 2) { median = k; break; } }
+    const threshold = Math.max(65, Math.min(180, median - 45));
+    const binary = new Uint8Array(dim * dim);
+    for (let j = 0; j < binary.length; j++) binary[j] = light[j] < threshold ? 1 : 0;
+    const visited = new Uint8Array(dim * dim), components = [];
+    for (let i = 0; i < binary.length; i++) {
+      if (!binary[i] || visited[i]) continue;
+      const stack = [i], cells = [];
+      visited[i] = 1;
+      while (stack.length) {
+        const p = stack.pop(); cells.push(p);
+        const x = p % dim, y = Math.floor(p / dim);
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const nx = x + dx, ny = y + dy;
+          if (nx < 0 || nx >= dim || ny < 0 || ny >= dim) continue;
+          const next = ny * dim + nx;
+          if (binary[next] && !visited[next]) {visited[next] = 1; stack.push(next);}
+        }
+      }
+      components.push(cells);
+    }
+    components.sort((a, b) => b.length - a.length);
+    if (!components.length || components[0].length < 22) return null;
+    const main = components[0];
+    const keep = components.filter((cells, ix) => ix === 0 || cells.length >= Math.max(10, main.length * .14));
+    let minX = dim, minY = dim, maxX = 0, maxY = 0, ink = 0;
+    for (const cells of keep) for (const p of cells) {
+      const x = p % dim, y = Math.floor(p / dim);
+      minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y); ink++;
+    }
+    if (ink < 26 || maxX - minX < 2 || maxY - minY < 9 || ink > dim * dim * .62) return null;
+    const source = document.createElement('canvas'); source.width = source.height = dim;
+    const pctx = source.getContext('2d'), output = pctx.createImageData(dim, dim);
+    for (let k = 0; k < output.data.length; k += 4) {output.data[k] = 255; output.data[k + 1] = 255; output.data[k + 2] = 255; output.data[k + 3] = 255;}
+    for (const cells of keep) for (const p of cells) {
+      const k = p * 4; output.data[k] = output.data[k + 1] = output.data[k + 2] = 0;
+    }
+    pctx.putImageData(output, 0, 0);
+    const dest = document.createElement('canvas'); dest.width = dest.height = 140;
+    const ctx = dest.getContext('2d'); ctx.fillStyle = 'white'; ctx.fillRect(0, 0, 140, 140);
+    const cropW = maxX - minX + 1, cropH = maxY - minY + 1, scale = Math.min(100 / cropW, 112 / cropH);
+    const dw = cropW * scale, dh = cropH * scale;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(source, minX, minY, cropW, cropH, (140 - dw) / 2, (140 - dh) / 2, dw, dh);
+    return dest;
+  }
+  // Font-aware digit matching complements Tesseract's OCR on isolated symbols.
+  let glyphTemplates = null;
+  function binaryGlyph(c) {
+    const scale = document.createElement('canvas'); scale.width = scale.height = 42;
+    const cx = scale.getContext('2d', {willReadFrequently: true});
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, 42, 42);
+    cx.drawImage(c, 0, 0, 42, 42);
+    const pixels = cx.getImageData(0, 0, 42, 42).data;
+    const binary = new Uint8Array(42 * 42);
+    for (let i = 0; i < binary.length; i++) binary[i] = pixels[i * 4] < 175 ? 1 : 0;
+    return binary;
+  }
+  function distanceMap(binary) {
+    const size = 42, inf = 1e4;
+    const dst = new Float32Array(size * size);
+    for (let i = 0; i < dst.length; i++) dst[i] = binary[i] ? 0 : inf;
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      const p = y * size + x;
+      if (x) dst[p] = Math.min(dst[p], dst[p - 1] + 1);
+      if (y) dst[p] = Math.min(dst[p], dst[p - size] + 1);
+      if (x && y) dst[p] = Math.min(dst[p], dst[p - size - 1] + 1.414);
+      if (x < size - 1 && y) dst[p] = Math.min(dst[p], dst[p - size + 1] + 1.414);
+    }
+    for (let y = size - 1; y >= 0; y--) for (let x = size - 1; x >= 0; x--) {
+      const p = y * size + x;
+      if (x < size - 1) dst[p] = Math.min(dst[p], dst[p + 1] + 1);
+      if (y < size - 1) dst[p] = Math.min(dst[p], dst[p + size] + 1);
+      if (x < size - 1 && y < size - 1) dst[p] = Math.min(dst[p], dst[p + size + 1] + 1.414);
+      if (x && y < size - 1) dst[p] = Math.min(dst[p], dst[p + size - 1] + 1.414);
+    }
+    return dst;
+  }
+  function templateCanvas(digit, font, weight) {
+    const scratch = document.createElement('canvas'); scratch.width = scratch.height = 140;
+    const t = scratch.getContext('2d', {willReadFrequently: true});
+    t.fillStyle = '#fff'; t.fillRect(0, 0, 140, 140);
+    t.fillStyle = '#000'; t.textAlign = 'center'; t.textBaseline = 'middle';
+    t.font = `${weight} 97px ${font}`; t.fillText(String(digit), 70, 72);
+    const data = t.getImageData(0, 0, 140, 140).data;
+    let x1 = 140, y1 = 140, x2 = 0, y2 = 0;
+    for (let y = 0; y < 140; y++) for (let x = 0; x < 140; x++) {
+      if (data[(y * 140 + x) * 4] >= 185) continue;
+      x1 = Math.min(x1, x); y1 = Math.min(y1, y); x2 = Math.max(x2, x); y2 = Math.max(y2, y);
+    }
+    const w = x2 - x1 + 1, h = y2 - y1 + 1, factor = Math.min(100 / w, 112 / h);
+    const result = document.createElement('canvas'); result.width = result.height = 140;
+    const r = result.getContext('2d'); r.fillStyle = '#fff'; r.fillRect(0, 0, 140, 140); r.imageSmoothingEnabled = false;
+    r.drawImage(scratch, x1, y1, w, h, (140 - w * factor) / 2, (140 - h * factor) / 2, w * factor, h * factor);
+    return result;
+  }
+  function classifyGlyph(canvas) {
+    if (!glyphTemplates) {
+      glyphTemplates = [];
+      for (const font of ['Arial', 'Verdana', 'Georgia', 'DejaVu Sans', 'Courier New', 'sans-serif', 'serif']) {
+        for (const weight of ['400', '700']) for (let d = 1; d <= 9; d++) {
+          const binary = binaryGlyph(templateCanvas(d, font, weight));
+          glyphTemplates.push({digit: d, binary, map: distanceMap(binary)});
+        }
+      }
+    }
+    const binary = binaryGlyph(canvas), map = distanceMap(binary);
+    let foreground = 0;
+    for (const bit of binary) foreground += bit;
+    if (foreground < 10) return null;
+    const scores = Array(10).fill(1e5);
+    for (const entry of glyphTemplates) {
+      let dInput = 0, dTemplate = 0, nTemplate = 0;
+      for (let i = 0; i < binary.length; i++) {
+        if (binary[i]) dInput += entry.map[i];
+        if (entry.binary[i]) {dTemplate += map[i]; nTemplate++;}
+      }
+      const score = .5 * (dInput / foreground + dTemplate / nTemplate);
+      if (score < scores[entry.digit]) scores[entry.digit] = score;
+    }
+    const ranked = scores.map((score, digit) => ({score, digit})).slice(1).sort((a, b) => a.score - b.score);
+    return {digit: ranked[0].digit, score: ranked[0].score, margin: ranked[1].score - ranked[0].score};
+  }
+
+  async function scanImage(file) {
+    if (working) return;
+    const token = ++scanToken;
+    scanningState(true); setProgress('Opening photo...', 3);
+    let worker = null;
+    try {
+      const image = await canvasFromFile(file); assertNotCancelled(token);
+      setProgress('Looking for the Sudoku grid...', 10);
+      // OpenCV straightens photos when available; the built-in matcher works offline.
+      const cv = await Promise.race([getOpenCV(), new Promise(resolve => setTimeout(() => resolve(null), 9000))]); assertNotCancelled(token);
+      const result = await isolateBoard(image, cv); assertNotCancelled(token);
+      const previewCtx = $('scan-preview').getContext('2d');
+      previewCtx.clearRect(0, 0, 900, 900); previewCtx.drawImage(result.canvas, 0, 0);
+      $('photo-card').hidden = false;
+      $('photo-details').textContent = result.found ? 'Grid aligned' : 'Best-effort crop';
+      setProgress(result.found ? 'Grid found. Identifying digits...' : 'Reading image crop. Check alignment in preview...', 30);
+      const context = result.canvas.getContext('2d', {willReadFrequently: true});
+      const targets = [];
+      for (let i = 0; i < 81; i++) {
+        const digitImage = makeDigitCanvas(context, i);
+        if (digitImage) targets.push({index: i, canvas: digitImage});
+      }
+      const found = Array(81).fill(0), uncertainCells = new Set();
+      const ambiguous = [];
+      for (let k = 0; k < targets.length; k++) {
+        assertNotCancelled(token);
+        const target = targets[k], guess = classifyGlyph(target.canvas);
+        target.guess = guess;
+        if (guess && guess.score < 1.5 && guess.margin >= .075) {
+          found[target.index] = guess.digit;
+          if (guess.score > .38 || guess.margin < .22) uncertainCells.add(target.index);
+        }
+        if (!guess || guess.score >= .34 || guess.margin < .28) ambiguous.push(target);
+      }
+      setProgress(`Pattern matching complete. ${ambiguous.length} digits to double-check...`, 51);
+      // OCR is an optional second opinion on ambiguous digits; failure to load
+      // never prevents a scan from placing the locally recognized digits.
+      if (ambiguous.length) {
+        try {
+          const Tesseract = await getTesseract(); assertNotCancelled(token);
+          worker = await Tesseract.createWorker('eng', 1, {logger: m => {
+            if (m.status === 'loading language traineddata') setProgress('Loading optical digit reader...', 54 + (m.progress || 0) * 10);
+          }});
+          assertNotCancelled(token);
+          await worker.setParameters({tessedit_pageseg_mode: '13', preserve_interword_spaces: '0', user_defined_dpi: '300'});
+          for (let k = 0; k < ambiguous.length; k++) {
+            assertNotCancelled(token);
+            const target = ambiguous[k];
+            setProgress(`Double-checking digit ${k + 1} of ${ambiguous.length}...`, 65 + Math.round(32 * k / ambiguous.length));
+            const {data} = await worker.recognize(target.canvas);
+            assertNotCancelled(token);
+            const matches = String(data.text || '').match(/[1-9]/g);
+            const ocrDigit = matches?.length === 1 ? Number(matches[0]) : 0;
+            const guess = target.guess;
+            if (ocrDigit) {
+              if (!found[target.index] || !guess || guess.score > .85 || (guess.score > .5 && (data.confidence || 0) >= 70)) {
+                found[target.index] = ocrDigit;
+              }
+              if (guess && ocrDigit !== guess.digit) uncertainCells.add(target.index);
+              else if ((data.confidence || 0) > 65 && guess?.score < .42) uncertainCells.delete(target.index);
+            }
+          }
+        } catch (ocrError) {
+          assertNotCancelled(token);
+          console.warn('Online OCR not available; using offline pattern matching.', ocrError);
+          setProgress('Finishing with locally recognized digits...', 97);
+        }
+      }
+      assertNotCancelled(token);
+      pushUndo(); values = found; origins = found.map(n => n ? 'scanned' : ''); uncertain = uncertainCells;
+      render(); save(); setProgress('Numbers copied to board!', 100);
+      const recognized = found.filter(Boolean).length, conflicts = conflictsFor(found).size;
+      if (!recognized) showMessage('No digits were recognized. Try a sharper, well-lit photo showing the full grid, or fill in numbers manually.', 'error');
+      else if (conflicts) showMessage(`Imported ${recognized} digits, but ${conflicts} cells conflict. Check the red cells; tap to correct them.`, 'error');
+      else showMessage(`Imported ${recognized} digits automatically. ${uncertainCells.size ? 'Review the amber cells before solving. ' : ''}Tap any cell to correct a scan, then Solve.`, 'success');
+    } catch (err) {
+      if (token === scanToken) showMessage(err.message || 'The image could not be read. Try another photo.', 'error');
+    } finally {
+      if (worker) { try { await worker.terminate(); } catch {} }
+      if (token === scanToken) scanningState(false);
+    }
+  }
+  function stopCamera() {
+    if (cameraStream) { cameraStream.getTracks().forEach(track => track.stop()); cameraStream = null; }
+    $('camera-video').srcObject = null;
+    $('camera-modal').hidden = true;
+    document.body.classList.toggle('modal-open', working);
+  }
+  async function openCamera() {
+    if (working) return;
+    if (!navigator.mediaDevices?.getUserMedia) { $('capture-input').click(); return; }
+    try {
+      $('camera-modal').hidden = false; document.body.classList.add('modal-open');
+      cameraStream = await navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: {ideal: 'environment'}, width: {ideal: 1600}, height: {ideal: 1200}}});
+      $('camera-video').srcObject = cameraStream;
+      await $('camera-video').play();
+    } catch {
+      stopCamera(); $('capture-input').click();
+      showMessage('Opening your phone’s camera instead. On the web, live preview requires HTTPS and camera permission.');
+    }
+  }
+  function snap() {
+    const v = $('camera-video');
+    if (!v.videoWidth || !v.videoHeight) return showMessage('The camera is not ready yet.', 'error');
+    const canvas = document.createElement('canvas'); canvas.width = v.videoWidth; canvas.height = v.videoHeight;
+    canvas.getContext('2d').drawImage(v, 0, 0);
+    stopCamera(); canvas.toBlob(blob => { if (blob) scanImage(new File([blob], 'sudoku-camera.jpg', {type: 'image/jpeg'})); }, 'image/jpeg', .92);
+  }
+  $('solve-btn').addEventListener('click', solve);
+  $('hint-btn').addEventListener('click', hint);
+  $('check-btn').addEventListener('click', check);
+  $('undo-btn').addEventListener('click', undo);
+  $('clear-btn').addEventListener('click', clear);
+  $('sample-btn').addEventListener('click', sample);
+  $('import-btn').addEventListener('click', () => { if (!working) $('import-input').click(); });
+  $('scan-btn').addEventListener('click', openCamera);
+  $('close-camera').addEventListener('click', stopCamera);
+  document.querySelector('[data-close-camera]').addEventListener('click', stopCamera);
+  $('take-photo').addEventListener('click', snap);
+  $('camera-file').addEventListener('click', () => { stopCamera(); $('capture-input').click(); });
+  $('cancel-scan').addEventListener('click', () => { scanToken++; scanningState(false); showMessage('Scan cancelled. Your board was not changed.'); });
+  for (const id of ['import-input', 'capture-input']) {
+    $(id).addEventListener('change', e => { const file = e.target.files?.[0]; e.target.value = ''; if (file) scanImage(file); });
+  }
+  initBoard();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  }
+  // Test hooks let automated regression tests exercise the exact shipped solver.
+  window.SudokuStudio = Object.freeze({classifyGlyph, solveGrid, conflictsFor, loadPuzzle: s => {if (!/^[0-9.]{81}$/.test(s)) throw new Error('Need exactly 81 characters'); values = [...s].map(x => x === '.' ? 0 : Number(x)); origins = values.map(x => x ? 'manual' : ''); uncertain = new Set(); render();}, getPuzzle: () => values.slice(), solve, check});
+})();
+
+</script>
+</body>
+</html>
